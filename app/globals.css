@@ -1,0 +1,212 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Updated color palette with modern fintech pan-African identity */
+:root {
+  --background: 0 0% 100%; /* white #FFFFFF */
+  --foreground: 220 15% 12%; /* charcoal #1F2937 */
+  --card: 0 0% 100%;
+  --card-foreground: 220 15% 12%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 15% 12%;
+  --primary: 160 84% 27%; /* emerald green #047857 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 27 86% 44%; /* gold #D97706 */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 220 13% 91%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 0 72% 51%; /* sunset red #DC2626 */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 160 84% 27%;
+  --chart-1: 160 84% 27%; /* emerald */
+  --chart-2: 27 86% 44%; /* gold */
+  --chart-3: 0 72% 51%; /* red */
+  --chart-4: 217 91% 60%; /* blue */
+  --chart-5: 142 71% 45%; /* green */
+  --radius: 0.75rem;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 220 15% 12%;
+  --sidebar-primary: 160 84% 27%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 220 13% 91%;
+  --sidebar-accent-foreground: 220 15% 12%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 160 84% 27%;
+}
+
+/* Dark mode with charcoal background */
+.dark {
+  --background: 220 15% 12%; /* charcoal #1F2937 */
+  --foreground: 0 0% 98%;
+  --card: 220 15% 15%;
+  --card-foreground: 0 0% 98%;
+  --popover: 220 15% 15%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 160 84% 39%; /* lighter emerald for dark mode */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 27 96% 54%; /* brighter gold for dark mode */
+  --secondary-foreground: 220 15% 12%;
+  --muted: 220 15% 20%;
+  --muted-foreground: 220 9% 65%;
+  --accent: 0 84% 60%; /* brighter red for dark mode */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 15% 25%;
+  --input: 220 15% 25%;
+  --ring: 160 84% 39%;
+  --chart-1: 160 84% 39%;
+  --chart-2: 27 96% 54%;
+  --chart-3: 0 84% 60%;
+  --chart-4: 217 91% 70%;
+  --chart-5: 142 71% 55%;
+  --sidebar: 220 15% 12%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-primary: 160 84% 39%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 220 15% 20%;
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-border: 220 15% 25%;
+  --sidebar-ring: 160 84% 39%;
+}
+
+/* Using Inter font via CSS variable for fintech clarity */
+@theme inline {
+  --font-sans: var(--font-sans);
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Smooth transitions for all interactive elements */
+  button,
+  a,
+  [role="button"] {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  /* Accessibility support - respect user preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* High contrast mode for accessibility */
+  @media (prefers-contrast: high) {
+    :root {
+      --border: 220 15% 30%;
+      --ring: 160 84% 35%;
+    }
+    .dark {
+      --border: 220 15% 70%;
+      --ring: 160 84% 50%;
+    }
+  }
+
+  /* Font scaling support for accessibility */
+  @media (min-width: 640px) {
+    html {
+      font-size: 16px;
+    }
+  }
+  @media (min-width: 1024px) {
+    html {
+      font-size: 18px;
+    }
+  }
+}
+
+/* Loading skeleton animation */
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.skeleton {
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  @apply bg-muted rounded;
+}
+
+/* Success celebration confetti */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.confetti {
+  animation: confetti-fall 3s ease-in forwards;
+}
+
+/* Safe area support for notched devices */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
