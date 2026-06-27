@@ -1,32 +1,6 @@
 {
   "name": "ubap",
   "buildCommand": "npm run build",
-  "env": {
-    "PI_API_KEY": {
-      "description": "Pi Network API Key from Pi Developer Portal",
-      "required": true
-    },
-    "NEXT_PUBLIC_UBAP_WALLET_ADDRESS": {
-      "description": "UBAP App Wallet Address for receiving Pi",
-      "required": true
-    },
-    "NEXT_PUBLIC_UBAP_RECIPIENT": {
-      "description": "Pi recipient address",
-      "required": true
-    },
-    "PI_APP_WALLET_PRIVATE_KEY": {
-      "description": "App wallet private key (keep secure)",
-      "required": true
-    },
-    "PI_NETWORK": {
-      "description": "Pi Network mode: mainnet or testnet",
-      "required": true
-    },
-    "NEXT_PUBLIC_APP_WALLET_ADDRESS": {
-      "description": "Next public app wallet address",
-      "required": true
-    }
-  },
   "framework": "nextjs",
   "regions": ["iad1"],
   "functions": {
