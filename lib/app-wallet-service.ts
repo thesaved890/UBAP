@@ -337,7 +337,7 @@ export async function getAppWalletTransactions(
  * Validate a Pi wallet address format
  * Pi addresses are 56 characters, uppercase alphanumeric
  */
-export function isValidPiAddress(address: string): boolean {
+export async function isValidPiAddress(address: string): Promise<boolean> {
   return /^[A-Z0-9]{56}$/.test(address)
 }
 
