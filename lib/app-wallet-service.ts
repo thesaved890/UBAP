@@ -23,6 +23,7 @@ export interface WalletTransaction {
   amount_pi: number
   currency: "pi"
   status: "pending" | "completed" | "failed" | "cancelled"
+  is_sandbox?: boolean
   txid: string | null
   payment_id: string | null
   user_id: string | null
@@ -154,7 +155,8 @@ export async function recordIncomingPayment(
   paymentId: string,
   txid: string,
   amount: number,
-  userId: string
+  userId: string,
+  isSandbox: boolean = false
 ) {
   const supabase = createSupabaseClient()
 
@@ -176,6 +178,7 @@ export async function recordIncomingPayment(
         amount_pi: amount,
         currency: "pi",
         status: "completed",
+        is_sandbox: isSandbox,
         txid,
         payment_id: paymentId,
         user_id: userId,

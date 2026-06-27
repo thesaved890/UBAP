@@ -39,7 +39,7 @@ export async function GET() {
     return NextResponse.json({
       configured: !!apiKey,
       walletReady: false,
-      message: "Could not reach Pi API — running in demo mode.",
+      message: "Could not reach Pi API.",
     })
   }
 }

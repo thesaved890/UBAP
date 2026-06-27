@@ -28,7 +28,7 @@ import { initiatePiPayment } from "@/lib/pi-network-sdk"
 
 export default function GroupSavingsPage() {
   const { user } = useUser()
-  const currentUserId = user?.id || "demo-user-001"
+  const currentUserId = user?.id ?? ""
 
   // Groupes d'épargne initiaux
   const initialGroups = [

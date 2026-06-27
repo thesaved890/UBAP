@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS wallet_transactions (
   amount_pi DECIMAL(20, 8) NOT NULL,
   currency TEXT NOT NULL DEFAULT 'pi',
   status TEXT NOT NULL DEFAULT 'pending', -- 'pending', 'completed', 'failed', 'cancelled'
+  is_sandbox BOOLEAN NOT NULL DEFAULT false,
   txid TEXT UNIQUE,
   payment_id TEXT, -- Links to Pi SDK payment ID
   user_id UUID REFERENCES users(id) ON DELETE SET NULL,

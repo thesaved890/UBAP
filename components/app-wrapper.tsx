@@ -25,9 +25,6 @@ function AppContent({ children }: { children: ReactNode }) {
 
   const handleOnboardingComplete = () => {
     localStorage.setItem("ubap_onboarding_completed", "true")
-    // Set demo mode with $10,000 virtual balance
-    localStorage.setItem("ubap_demo_mode", "true")
-    localStorage.setItem("ubap_demo_balance", "10000")
     setShowOnboarding(false)
   }
 

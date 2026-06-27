@@ -39,7 +39,6 @@ export default function HomePage() {
   const { language, setLanguage } = useLanguage()
   const [showBalances, setShowBalances] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
-  const [isDemoMode, setIsDemoMode] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [unreadNotifications, setUnreadNotifications] = useState(3)
   const [piBalance, setPiBalance] = useState(0) // Declare setPiBalance
@@ -58,9 +57,6 @@ export default function HomePage() {
   ]
 
   useEffect(() => {
-    const demoMode = localStorage.getItem("ubap_demo_mode")
-    setIsDemoMode(demoMode === "true")
-
     // Check for dark mode
     const darkMode = localStorage.getItem("ubap_dark_mode")
     setIsDarkMode(darkMode === "true")
@@ -252,13 +248,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {isDemoMode && (
-              <div className="mb-4 px-3 py-2 bg-secondary/20 border border-secondary/30 rounded-lg">
-                <p className="text-xs text-center">
-                  <span className="font-semibold">Demo Mode</span> - Practice with $10,000 virtual balance
-                </p>
-              </div>
-            )}
 
             <Card className="bg-primary-foreground/10 border-primary-foreground/30 backdrop-blur-sm">
               <CardContent className="pt-6">

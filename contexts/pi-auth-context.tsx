@@ -7,7 +7,7 @@ import React, {
   useEffect,
   type ReactNode,
 } from "react";
-import { PI_NETWORK_CONFIG, BACKEND_URLS } from "@/lib/system-config";
+import { PI_NETWORK_CONFIG } from "@/lib/system-config";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 export interface PiUser {
@@ -17,9 +17,15 @@ export interface PiUser {
 
 export interface LoginDTO {
   id: string;
+  pi_uid?: string;
   username: string;
-  credits_balance: number;
-  terms_accepted: boolean;
+  country?: string;
+  balance_pi?: number;
+  balance_fiat?: number;
+  created_at?: string;
+  updated_at?: string;
+  credits_balance?: number;
+  terms_accepted?: boolean;
 }
 
 interface PiAuthResult {
@@ -55,32 +61,15 @@ interface PiAuthContextType {
   piAccessToken: string | null;
   userData: LoginDTO | null;
   isSandbox: boolean;
-  isDemoMode: boolean;
   reinitialize: () => Promise<void>;
 }
 
 const PiAuthContext = createContext<PiAuthContextType | undefined>(undefined);
 
-// ─── Demo fallback user ───────────────────────────────────────────────────────
-const DEMO_USER: LoginDTO = {
-  id: "ubap_demo_001",
-  username: "Pioneer Demo",
-  credits_balance: 10000,
-  terms_accepted: true,
-};
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function isPiBrowser(): boolean {
   if (typeof window === "undefined") return false;
   return typeof (window as any).Pi !== "undefined";
-}
-
-function isPreviewEnv(): boolean {
-  if (typeof window === "undefined") return true;
-  const h = window.location.hostname;
-  // Only treat as preview if running on localhost or v0.dev itself
-  // vercel.app deployments are REAL production — do NOT bypass Pi auth there
-  return h.includes("localhost") || h === "v0.dev" || h.endsWith(".v0.dev");
 }
 
 function loadSDKScript(url: string): Promise<void> {
@@ -119,33 +108,21 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
   const [piAccessToken, setPiAccessToken]     = useState<string | null>(null);
   const [userData, setUserData]               = useState<LoginDTO | null>(null);
   const [isSandbox, setIsSandbox]             = useState(true);
-  const [isDemoMode, setIsDemoMode]           = useState(false);
 
   const initialize = async () => {
     try {
-      // ── PREVIEW / DEMO (not in Pi Browser) ──────────────────────────────
-      if (isPreviewEnv() || !isPiBrowser()) {
-        // Try to load SDK anyway — maybe running in Pi Browser on vercel.app
-        if (PI_NETWORK_CONFIG.SDK_URL) {
-          try { await loadSDKScript(PI_NETWORK_CONFIG.SDK_URL); } catch { /* ok */ }
-        }
-
-        if (!isPiBrowser()) {
-          // Genuine demo mode
-          setAuthMessage("Mode demonstration (ouvrez dans Pi Browser pour les vrais depots)");
-          setUserData(DEMO_USER);
-          setPiAccessToken("demo_token");
-          setIsDemoMode(true);
-          setIsSandbox(true);
-          setIsAuthenticated(true);
-          return;
-        }
-      }
-
-      // ── REAL PI BROWSER ──────────────────────────────────────────────────
       setAuthMessage("Chargement Pi SDK...");
       if (PI_NETWORK_CONFIG.SDK_URL) {
         await loadSDKScript(PI_NETWORK_CONFIG.SDK_URL);
+      }
+
+      if (!isPiBrowser()) {
+        setAuthMessage(
+          "Pi Browser requis. Ouvrez UBAP dans Pi Browser sur mobile pour vous connecter."
+        );
+        setIsAuthenticated(false);
+        setIsSandbox(PI_NETWORK_CONFIG.SANDBOX);
+        return;
       }
 
       if (!isPiBrowser()) {
@@ -185,48 +162,34 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
 
       // Authenticate with UBAP backend using Pi access token
       setAuthMessage("Connexion au serveur UBAP...");
-      try {
-        const res = await fetch(BACKEND_URLS.LOGIN, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${authResult.accessToken}`,
-          },
-          body: JSON.stringify({ pi_auth_token: authResult.accessToken }),
-        });
-        if (res.ok) {
-          const data: LoginDTO = await res.json();
-          setUserData(data);
-        } else {
-          // Backend unavailable — use Pi user info directly
-          setUserData({
-            id: authResult.user.uid,
-            username: authResult.user.username,
-            credits_balance: 0,
-            terms_accepted: true,
-          });
-        }
-      } catch {
-        setUserData({
-          id: authResult.user.uid,
+      const loginResponse = await fetch("/api/auth/pi-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          piUid: authResult.user.uid,
           username: authResult.user.username,
-          credits_balance: 0,
-          terms_accepted: true,
-        });
+        }),
+      });
+
+      if (!loginResponse.ok) {
+        throw new Error("Impossible de recuperer l'utilisateur depuis le serveur UBAP");
       }
 
+      const loginData = await loginResponse.json();
+      const user: LoginDTO = loginData.user ?? loginData;
+      setUserData(user);
+
       setIsAuthenticated(true);
-      setIsDemoMode(false);
       setAuthMessage("Connecte!");
 
     } catch (err: any) {
-      // Graceful fallback — never block the user
-      setAuthMessage("Mode demonstration actif");
-      setUserData(DEMO_USER);
-      setPiAccessToken("demo_token");
-      setIsDemoMode(true);
-      setIsSandbox(true);
-      setIsAuthenticated(true);
+      console.error("[v0] Pi auth error:", err?.message ?? err);
+      setAuthMessage(
+        "Echec d'authentification Pi. Ouvrez UBAP dans Pi Browser et essayez de nouveau."
+      );
+      setUserData(null);
+      setIsAuthenticated(false);
+      setIsSandbox(PI_NETWORK_CONFIG.SANDBOX);
     }
   };
 
@@ -241,7 +204,6 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
     piAccessToken,
     userData,
     isSandbox,
-    isDemoMode,
     reinitialize: initialize,
   };
 

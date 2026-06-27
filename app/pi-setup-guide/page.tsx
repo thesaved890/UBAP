@@ -165,10 +165,10 @@ export default function PiNetworkSetupPage() {
             <Smartphone className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
             <div className="text-sm">
               <p className="font-semibold text-blue-900 dark:text-blue-100">
-                UBAP fonctionne deja en mode demonstration
+                UBAP utilise maintenant la vraie intégration Pi
               </p>
               <p className="text-blue-700 dark:text-blue-300 mt-1">
-                Vous pouvez tester les depots en dehors de Pi Browser. Pour les vrais Pi mainnet, suivez ce guide.
+                Pour des dépôts réels, ouvrez UBAP dans Pi Browser et suivez les étapes ci-dessous.
               </p>
             </div>
           </CardContent>
@@ -235,9 +235,9 @@ export default function PiNetworkSetupPage() {
               </p>
             </div>
             <div>
-              <p className="font-semibold mb-1">Puis-je faire des depots en mode demo?</p>
+              <p className="font-semibold mb-1">Puis-je faire des depots hors de Pi Browser?</p>
               <p className="text-muted-foreground">
-                Oui! En dehors de Pi Browser, les depots sont en mode demo pour tester l'interface. Les vrais depots Pi ne fonctionnent que dans Pi Browser avec PI_API_KEY configure.
+                Les dépôts réels ne fonctionnent que dans Pi Browser. Utilisez une clé PI_API_KEY valide et Pi Browser pour des dépôts live.
               </p>
             </div>
           </CardContent>

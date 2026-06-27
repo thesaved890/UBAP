@@ -7,7 +7,7 @@ import { PiServerSDK } from "@/lib/pi-network-sdk";
  * Called by the client Pi SDK when the user has confirmed their payment
  * in Pi Wallet. We call the Pi Platform API server-side to approve it.
  *
- * If PI_API_KEY is not set → we approve locally (sandbox/demo mode).
+ * If PI_API_KEY is not set → we approve locally in sandbox mode.
  * This lets real users with Pi Browser test the full flow even before
  * PI_API_KEY is configured in Vercel.
  */

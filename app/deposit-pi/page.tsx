@@ -42,7 +42,7 @@ const pause = (ms: number) => new Promise(r => setTimeout(r, ms))
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function DepositPiPage() {
-  const { userData, isSandbox, isDemoMode } = usePiAuth()
+  const { userData, isSandbox } = usePiAuth()
 
   const [amount, setAmount]       = useState("")
   const [step, setStep]           = useState<Step>("input")
@@ -80,23 +80,11 @@ export default function DepositPiPage() {
       return
     }
 
-    // ── DEMO MODE ─────────────────────────────────────────────────────────
-    if (!inPiBrowser || isDemoMode) {
-      setStep("waiting_wallet")
-      await pause(1500)
-      setStep("processing")
-      await pause(2000)
-      const fakeTxid = `DEMO-${Date.now().toString(36).toUpperCase()}`
-      const { newBalance: bal } = PiBalanceStore.recordDeposit({
-        amount: val,
-        fee,
-        txid: fakeTxid,
-        memo: `Depot demo UBAP — ${userData?.username ?? "Pioneer"}`,
-        isSandbox: true,
-      })
-      setTxid(fakeTxid)
-      setNewBalance(bal)
-      setStep("success")
+    if (!inPiBrowser) {
+      showToast(
+        "Ouvrez UBAP dans Pi Browser sur votre telephone pour effectuer un vrai depot Pi.",
+        false
+      )
       return
     }
 
@@ -169,12 +157,12 @@ export default function DepositPiPage() {
         </div>
         <div className="text-center space-y-2">
           <h2 className="text-xl font-bold">
-            {inPiBrowser && !isDemoMode ? "Confirmez dans votre Pi Wallet" : "Traitement en cours..."}
+            {inPiBrowser ? "Confirmez dans votre Pi Wallet" : "Traitement en cours..."}
           </h2>
           <p className="text-sm text-muted-foreground max-w-xs text-center">
-            {inPiBrowser && !isDemoMode
+            {inPiBrowser
               ? "Pi Wallet est ouvert. Verifiez le montant et appuyez sur Confirmer."
-              : "Simulation du flux de depot Pi..."}
+              : "Ouverture du flux de depot Pi..."}
           </p>
           <p className="text-xs text-muted-foreground flex items-center justify-center gap-2 pt-2">
             <Clock className="h-3.5 w-3.5" />
@@ -267,9 +255,9 @@ export default function DepositPiPage() {
               </div>
             )}
 
-            {(isSandbox || isDemoMode) && (
+            {isSandbox && (
               <Badge variant="outline" className="w-full justify-center text-amber-600 border-amber-300 text-xs">
-                {isDemoMode ? "Mode Demonstration" : "Mode Sandbox — Pi Testnet"}
+                Mode Sandbox — Pi Testnet
               </Badge>
             )}
           </CardContent>
@@ -359,9 +347,9 @@ export default function DepositPiPage() {
       <div className="px-4 py-2 flex justify-center">
         <Badge
           variant="outline"
-          className={`text-xs ${isDemoMode ? "text-gray-500 border-gray-300" : isSandbox ? "text-amber-600 border-amber-400" : "text-green-600 border-green-400"}`}
+          className={`text-xs ${isSandbox ? "text-amber-600 border-amber-400" : "text-green-600 border-green-400"}`}
         >
-          {isDemoMode ? "Demo" : isSandbox ? "Sandbox" : "Mainnet"}
+          {isSandbox ? "Sandbox" : "Mainnet"}
         </Badge>
       </div>
 
@@ -372,9 +360,8 @@ export default function DepositPiPage() {
           <Alert className="border-amber-400 bg-amber-50 dark:bg-amber-950/20">
             <Smartphone className="h-4 w-4 text-amber-600 flex-shrink-0" />
             <AlertDescription className="text-xs text-amber-800 dark:text-amber-200">
-              <span className="font-semibold block">Pi Browser requis pour les vrais depots</span>
-              Actuellement en mode demonstration. Pour deposer de vrais Pi, ouvrez UBAP dans
-              {" "}<strong>Pi Browser</strong> sur votre telephone.
+              <span className="font-semibold block">Pi Browser requis pour les depôts</span>
+              Ouvrez UBAP dans <strong>Pi Browser</strong> sur votre téléphone pour effectuer un dépôt réel.
             </AlertDescription>
           </Alert>
         )}
@@ -518,9 +505,9 @@ export default function DepositPiPage() {
               onClick={handleDeposit}
             >
               <ArrowDownToLine className="h-5 w-5 mr-2" />
-              {inPiBrowser && !isDemoMode
+              {inPiBrowser
                 ? `Deposer π ${parsed || ""} via Pi Wallet`
-                : `Simuler un depot de π ${parsed || ""}`}
+                : `Ouvrez Pi Browser pour deposer`}
             </Button>
 
           </CardContent>

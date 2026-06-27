@@ -136,7 +136,12 @@ export function initiatePiPayment(
           fetch("/api/pi/complete", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ paymentId, txid }),
+            body: JSON.stringify({
+              paymentId,
+              txid,
+              amount,
+              userId: metadata?.userId ?? null,
+            }),
           })
             .catch(() => { /* Non-blocking */ })
             .finally(() => {

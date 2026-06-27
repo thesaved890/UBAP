@@ -25,7 +25,12 @@ export async function getOrCreateUser(piUid: string, username: string, country: 
     .from('users')
     .select('*')
     .eq('pi_uid', piUid)
-    .single()
+    .maybeSingle()
+
+  if (fetchError && fetchError.code !== 'PGRST116') {
+    console.error('[v0] Error fetching user by pi_uid:', fetchError)
+    throw new Error('Failed to fetch user')
+  }
 
   if (existingUser) {
     // Update last login
@@ -33,7 +38,7 @@ export async function getOrCreateUser(piUid: string, username: string, country: 
       .from('users')
       .update({ last_login: new Date().toISOString() })
       .eq('id', existingUser.id)
-    
+      
     return existingUser
   }
 
@@ -45,6 +50,7 @@ export async function getOrCreateUser(piUid: string, username: string, country: 
     balance_pi: 0,
     balance_fiat: 0,
     fiat_currency: getCurrencyForCountry(country),
+    last_login: new Date().toISOString(),
   }
 
   const { data: createdUser, error: createError } = await supabase

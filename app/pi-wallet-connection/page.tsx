@@ -79,7 +79,7 @@ export default function PiWalletConnectionPage() {
             <Alert className="border-amber-300 bg-amber-50 dark:bg-amber-950/20">
               <AlertCircle className="h-4 w-4 text-amber-600" />
               <AlertDescription className="text-sm">
-                Les paiements Pi ne fonctionnent QUE dans <strong>Pi Browser</strong> sur mobile. Sur desktop, c'est en mode demo.
+                Les paiements Pi ne fonctionnent QUE dans <strong>Pi Browser</strong> sur mobile. Sur desktop, ouvrez la page depuis un téléphone pour effectuer un dépôt réel.
               </AlertDescription>
             </Alert>
 
@@ -233,7 +233,7 @@ export default function PiWalletConnectionPage() {
             <div>
               <p className="font-semibold">Pi Wallet ne s'ouvre pas?</p>
               <p className="text-xs text-muted-foreground mt-1">
-                Assurez-vous d'utiliser Pi Browser sur mobile. Sur desktop, c'est du demo mode.
+                Assurez-vous d'utiliser Pi Browser sur mobile. Sur desktop, ouvrez cette page depuis un téléphone pour un dépôt réel.
               </p>
             </div>
             <div>

@@ -95,7 +95,7 @@ export default function PiPaymentsSetup() {
               ) : (
                 <div className="flex items-center gap-2 text-blue-600">
                   <AlertCircle className="h-4 w-4" />
-                  <span className="text-xs">Demo Mode</span>
+                  <span className="text-xs">Sandbox Mode</span>
                 </div>
               )}
             </div>

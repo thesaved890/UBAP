@@ -1,85 +1,49 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
-// Supabase disabled until package is installed
-// import { getOrCreateUser, updateUserBalance, getUserById } from "@/lib/user-service"
+import { createContext, useContext, type ReactNode } from "react"
+import { usePiAuth } from "@/contexts/pi-auth-context"
 
 interface User {
   id: string
-  piAddress: string
-  fullName: string
-  phoneNumber: string
-  country: string
-  piBalance: number
-  fiatBalance: number
-  createdAt: string
+  username: string
+  country?: string
+  balance_pi?: number
+  balance_fiat?: number
+  createdAt?: string
+  updatedAt?: string
 }
 
 interface UserContextType {
   user: User | null
   loading: boolean
-  updateBalance: (piBalance: number, fiatBalance: number) => Promise<void>
   refreshUser: () => Promise<void>
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export function UserProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const { userData, isAuthenticated, reinitialize } = usePiAuth()
 
-  useEffect(() => {
-    loadUser()
-  }, [])
-
-  const loadUser = async () => {
-    try {
-      // Using localStorage for demo mode
-      const storedUser = localStorage.getItem("ubap_demo_user")
-      
-      if (storedUser) {
-        setUser(JSON.parse(storedUser))
-      } else {
-        // Create demo user
-        const demoUser: User = {
-          id: "demo-user-001",
-          piAddress: "GDEMOPIADDRESS123456789",
-          fullName: "Demo User",
-          phoneNumber: "+237600000000",
-          country: "Cameroon",
-          piBalance: 1000,
-          fiatBalance: 500000,
-          createdAt: new Date().toISOString(),
-        }
-        localStorage.setItem("ubap_demo_user", JSON.stringify(demoUser))
-        setUser(demoUser)
+  const user = userData
+    ? {
+        id: userData.id,
+        username: userData.username,
+        country: userData.country,
+        balance_pi: userData.balance_pi,
+        balance_fiat: userData.balance_fiat,
+        createdAt: userData.created_at,
+        updatedAt: userData.updated_at,
       }
-    } catch (error) {
-      console.error("[v0] Error loading user:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
+    : null
 
-  const updateBalance = async (piBalance: number, fiatBalance: number) => {
-    if (!user) return
-    
-    try {
-      // Update in localStorage
-      const updatedUser = { ...user, piBalance, fiatBalance }
-      localStorage.setItem("ubap_demo_user", JSON.stringify(updatedUser))
-      setUser(updatedUser)
-    } catch (error) {
-      console.error("[v0] Error updating balance:", error)
-    }
-  }
+  const loading = !isAuthenticated
 
   const refreshUser = async () => {
-    await loadUser()
+    await reinitialize()
   }
 
   return (
-    <UserContext.Provider value={{ user, loading, updateBalance, refreshUser }}>
+    <UserContext.Provider value={{ user, loading, refreshUser }}>
       {children}
     </UserContext.Provider>
   )

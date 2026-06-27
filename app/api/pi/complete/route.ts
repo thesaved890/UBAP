@@ -9,7 +9,7 @@ import { recordIncomingPayment } from "@/lib/app-wallet-service";
  * We call the Pi Platform API server-side to mark the payment as complete.
  * We also record the incoming payment to the app wallet.
  *
- * If PI_API_KEY is not set → complete locally (sandbox/demo mode).
+ * If PI_API_KEY is not set → complete locally in sandbox mode.
  */
 export async function POST(request: Request) {
   try {
@@ -24,9 +24,9 @@ export async function POST(request: Request) {
     const finalTxid = txid ?? `SANDBOX-${Date.now()}`;
 
     try {
-      // Record incoming payment to app wallet
+      // Record incoming payment to app wallet for audit
       if (amount && userId) {
-        await recordIncomingPayment(paymentId, finalTxid, amount, userId);
+        await recordIncomingPayment(paymentId, finalTxid, amount, userId, !sdk.isConfigured);
       }
     } catch (walletError) {
       console.error("Failed to record payment in app wallet:", walletError);

@@ -66,7 +66,7 @@ const RULES = {
 
 export default function TontinePage() {
   const { user } = useUser()
-  const currentUserId = user?.id || "demo-user-001"
+  const currentUserId = user?.id ?? ""
 
   // ── Données initiales ────────────────────────────────────────────────────────
   const initialGroups: TontineGroup[] = [
@@ -77,7 +77,7 @@ export default function TontinePage() {
       membersJoined: 7,
       contribution: 0.003,
       status: "forming",
-      inviteCode: "TONT-DEMO01",
+      inviteCode: "TONT-UBAP01",
       creatorId: "other-user-123",
       unreadMessages: 0,
       currentRound: 0,
