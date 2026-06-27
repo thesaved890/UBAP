@@ -1,6 +1,5 @@
 {
   "name": "ubap",
-  "description": "Digital banking app for Pi Network on African continent",
   "buildCommand": "npm run build",
   "env": {
     "PI_API_KEY": {
