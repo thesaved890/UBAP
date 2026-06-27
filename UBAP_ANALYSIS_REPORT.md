@@ -366,7 +366,7 @@ vercel --prod
 ```env
 PI_API_KEY=your_pi_api_key
 PI_WALLET_PRIVATE_KEY=your_wallet_private_key
-NEXT_PUBLIC_APP_URL=https://ubap-drab.vercel.app
+NEXT_PUBLIC_APP_URL=https://ubapi.vercel.app
 ```
 
 ---

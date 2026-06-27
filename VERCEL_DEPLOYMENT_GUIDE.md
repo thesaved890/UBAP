@@ -43,7 +43,7 @@ DATABASE_URL=your-database-url
 
 1. Click **"Deploy"** button
 2. Wait for deployment to complete (usually 2-3 minutes)
-3. Your app will be live at `https://ubap-drab.vercel.app`
+3. Your app will be live at `https://ubapi.vercel.app`
 
 ## Step 4: Verify Deployment
 

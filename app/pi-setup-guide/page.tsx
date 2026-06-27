@@ -44,7 +44,7 @@ export default function PiNetworkSetupPage() {
           <Alert className="bg-blue-50 dark:bg-blue-950/20 border-blue-300">
             <Info className="h-4 w-4 text-blue-600" />
             <AlertDescription className="text-xs text-blue-700 dark:text-blue-300">
-              Vous devez etre dans Pi Browser pour creer une app. UBAP doit etre votre URL actuelle (ex: ubap-drab.vercel.app).
+              Vous devez etre dans Pi Browser pour creer une app. UBAP doit etre votre URL actuelle (ex: ubapi.vercel.app).
             </AlertDescription>
           </Alert>
         </div>

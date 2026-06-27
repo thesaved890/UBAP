@@ -11,7 +11,7 @@ This guide will help you set up Pi Network SDK and OCR services for production u
 3. Click "Create New App"
 4. Fill in app details:
    - App Name: **UBAP**
-   - App URL: Your deployed Vercel URL (e.g., `https://ubap-drab.vercel.app`)
+   - App URL: Your deployed Vercel URL (e.g., `https://ubapi.vercel.app`)
    - Description: United Bank for African Pioneers
 5. Copy your **API Key**
 

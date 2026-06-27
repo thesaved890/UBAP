@@ -54,7 +54,7 @@ PI_SANDBOX_MODE=false
 - [ ] Check browser console (F12) - no red errors
 
 ### Wallet Verification
-- [ ] Go to `https://ubap-drab.vercel.app/admin/wallet-config`
+- [ ] Go to `https://ubapi.vercel.app/admin/wallet-config`
 - [ ] Should show all green checkmarks:
   - [ ] Wallet Address Configured ✓
   - [ ] API Key Configured ✓
