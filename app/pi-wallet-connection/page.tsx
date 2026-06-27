@@ -15,7 +15,7 @@ import {
   ExternalLink,
   Wallet,
   Lock,
-  Transactions,
+  List,
 } from 'lucide-react'
 import Link from 'next/link'
 import { BottomNav } from '@/components/bottom-nav'
@@ -111,7 +111,7 @@ export default function PiWalletConnectionPage() {
                 },
                 {
                   n: '5',
-                  icon: <Transactions className="h-4 w-4" />,
+                  icon: <List className="h-4 w-4" />,
                   title: 'Transaction enregistree',
                   desc: 'Une fois confirmee, Pi Blockchain enregistre la transaction',
                 },
