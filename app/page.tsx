@@ -25,11 +25,13 @@ import {
   ChevronRight,
   PiggyBank,
   Wallet,
+  LogOut,
 } from "lucide-react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { BalanceCardSkeleton } from "@/components/loading-skeleton"
 import { UBAPBackground } from "@/components/ubap-background"
+import { usePiAuth } from "@/contexts/pi-auth-context"
 import { useLanguage } from "@/contexts/language-context"
 import { useTranslation } from "@/hooks/use-translation"
 import { PiBalanceStore } from "@/lib/pi-balance-store"
@@ -37,6 +39,7 @@ import { PiBalanceStore } from "@/lib/pi-balance-store"
 export default function HomePage() {
   const { t } = useTranslation()
   const { language, setLanguage } = useLanguage()
+  const { logout } = usePiAuth()
   const [showBalances, setShowBalances] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [isDarkMode, setIsDarkMode] = useState(false)
@@ -230,6 +233,15 @@ export default function HomePage() {
                   aria-label="Toggle theme"
                 >
                   {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-primary-foreground hover:bg-primary-foreground/20"
+                  onClick={logout}
+                  aria-label="Log out"
+                >
+                  <LogOut className="h-5 w-5" />
                 </Button>
                 <Link href="/notifications">
                   <Button

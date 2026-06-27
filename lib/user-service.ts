@@ -123,20 +123,3 @@ function getCurrencyForCountry(country: string): string {
   return currencyMap[country] || "USD"
 }
 
-// Export UserService object for easier imports
-export const UserService = {
-  getOrCreateUser,
-  updateUserBalance,
-  getUserById,
-  createUser: async (userData: any) => {
-    const supabase = createSupabaseClient()
-    const { data, error } = await supabase
-      .from('users')
-      .insert(userData)
-      .select()
-      .single()
-    if (error) throw error
-    return data
-  },
-  updateBalance: updateUserBalance,
-}

@@ -25,8 +25,10 @@ import {
 import Link from "next/link"
 import { BottomNav } from "@/components/bottom-nav"
 import { useState } from "react"
+import { usePiAuth } from "@/contexts/pi-auth-context"
 
 export default function SettingsPage() {
+  const { logout } = usePiAuth()
   const [biometricEnabled, setBiometricEnabled] = useState(true)
   const [faceIdEnabled, setFaceIdEnabled] = useState(true)
   const [transactionNotifs, setTransactionNotifs] = useState(true)
@@ -293,7 +295,7 @@ export default function SettingsPage() {
         </Card>
 
         {/* Logout */}
-        <Button variant="destructive" className="w-full" size="lg">
+        <Button variant="destructive" className="w-full" size="lg" onClick={logout}>
           <LogOut className="h-5 w-5 mr-2" />
           Log Out
         </Button>

@@ -61,6 +61,9 @@ interface PiAuthContextType {
   piAccessToken: string | null;
   userData: LoginDTO | null;
   isSandbox: boolean;
+  isLoading: boolean;
+  login: () => Promise<void>;
+  logout: () => void;
   reinitialize: () => Promise<void>;
 }
 
@@ -108,8 +111,10 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
   const [piAccessToken, setPiAccessToken]     = useState<string | null>(null);
   const [userData, setUserData]               = useState<LoginDTO | null>(null);
   const [isSandbox, setIsSandbox]             = useState(true);
+  const [isLoading, setIsLoading]             = useState(true);
 
   const initialize = async () => {
+    setIsLoading(true);
     try {
       setAuthMessage("Chargement Pi SDK...");
       if (PI_NETWORK_CONFIG.SDK_URL) {
@@ -123,10 +128,6 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
         setIsAuthenticated(false);
         setIsSandbox(PI_NETWORK_CONFIG.SANDBOX);
         return;
-      }
-
-      if (!isPiBrowser()) {
-        throw new Error("Pi SDK introuvable apres chargement");
       }
 
       setAuthMessage("Initialisation Pi Network...");
@@ -181,7 +182,6 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
 
       setIsAuthenticated(true);
       setAuthMessage("Connecte!");
-
     } catch (err: any) {
       console.error("[v0] Pi auth error:", err?.message ?? err);
       setAuthMessage(
@@ -190,7 +190,18 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
       setUserData(null);
       setIsAuthenticated(false);
       setIsSandbox(PI_NETWORK_CONFIG.SANDBOX);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUserData(null);
+    setPiAccessToken(null);
+    setAuthMessage("Déconnecté. Appuyez sur Se connecter pour vous reconnecter.");
+    setIsSandbox(PI_NETWORK_CONFIG.SANDBOX);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -204,6 +215,9 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
     piAccessToken,
     userData,
     isSandbox,
+    isLoading,
+    login: initialize,
+    logout,
     reinitialize: initialize,
   };
 
