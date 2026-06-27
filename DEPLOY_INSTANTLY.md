@@ -1,29 +1,25 @@
 # Deploy UBAP to Vercel in 3 Steps
 
 ## Step 1: Go to Vercel Dashboard
-Open https://vercel.com/dashboard and log in with:
-- Email: mohamedachafa86@gmail.com
-- Password: (Your password)
+Open https://vercel.com/dashboard and log in to your account or team.
 
 ## Step 2: Create New Project
 1. Click "Add New..." → "Project"
 2. Select your GitHub repository (UBAP)
 3. Click "Import"
 
-## Step 3: Environment Variables (Auto-Populated)
-The environment variables are **already configured** in `vercel.json`:
+## Step 3: Environment Variables
+Do NOT store secrets in the repository. `vercel.json` no longer contains secret values — set them in the Vercel dashboard or via the Vercel CLI.
 
-```
-PI_API_KEY=ic0tlakkfjllvvjkw1jkvyu5lz2kfgy9zibfe9rtol51wwmakd5qi3wfhngd2kpn
-NEXT_PUBLIC_UBAP_WALLET_ADDRESS=GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M
-PI_APP_WALLET_PRIVATE_KEY=SAGVBYLF7L7KPHOW66JQYOPMEJMZLXOSZTFIL463PZJ4CGAKQ7MWQR2R
-PI_NETWORK=mainnet
-```
+Dashboard: Project Settings → Environment Variables → Add each variable (`PI_API_KEY`, `PI_APP_WALLET_PRIVATE_KEY`, etc.)
 
-**If prompted for environment variables during import:**
-- Copy the values from `/.env.example`
-- Paste into each field in Vercel
-- Click "Deploy"
+CLI (example):
+```
+vercel env add PI_API_KEY production
+vercel env add PI_APP_WALLET_PRIVATE_KEY production
+vercel env add PI_NETWORK production
+```
+Or upload values during project import. Refer to `WALLET_API_KEY_SETUP.md` for required keys.
 
 ## Step 4: Wait for Deployment
 - Deployment takes 2-3 minutes
@@ -49,7 +45,7 @@ Check the Vercel Function Logs. You should see:
 [v0] PiServerSDK.isConfigured: true (Key length: 64)
 ```
 
-If you see `false`, the environment variables didn't load. Re-check Step 3.
+If you see `false`, the environment variables didn't load. Re-check Step 3 and confirm variables exist for the correct environment (Preview vs Production).
 
 ## Support
 - Deployment Guide: `VERCEL_DEPLOYMENT_GUIDE.md`
