@@ -21,7 +21,7 @@ Dans votre projet Supabase:
 
 ## Étape 3: Ajouter les variables d'environnement dans Vercel
 
-1. Allez dans votre projet Vercel (ubap.vercel.app)
+1. Allez dans votre projet Vercel (ubap-drab.vercel.app)
 2. `Settings` → `Environment Variables`
 3. Ajoutez:
    ```
