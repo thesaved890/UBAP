@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { PiServerSDK } from "@/lib/pi-network-sdk";
+import { logAuditEvent } from "@/lib/audit-service";
 
 /**
  * POST /api/pi/approve
@@ -26,16 +27,18 @@ export async function POST(request: Request) {
     // No API key → approve locally (sandbox/demo)
     if (!sdk.isConfigured) {
       console.log("[v0] API Key not configured, approving in sandbox mode");
+      await logAuditEvent("pi_payment_approved", "Payment approved in sandbox mode", { paymentId, mode: "sandbox" });
       return NextResponse.json({
         success: true,
         paymentId,
-        mode: "local_sandbox",
+        mode: "sandbox",
         note: "PI_API_KEY not set — approved locally. Add PI_API_KEY in Vercel for production.",
       });
     }
 
     console.log("[v0] Calling Pi API to approve payment");
     const result = await sdk.approvePayment(paymentId);
+    await logAuditEvent("pi_payment_approved", "Payment approved with Pi API", { paymentId, mode: "pi_api" });
     console.log("[v0] Payment approved successfully");
     return NextResponse.json({ success: true, paymentId, result });
 

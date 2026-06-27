@@ -1,14 +1,66 @@
 import { createClient } from '@supabase/supabase-js'
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+class NoopQueryBuilder {
+  constructor(private readonly tableName: string) {}
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  select() { return this }
+  insert() { return this }
+  update() { return this }
+  delete() { return this }
+  eq() { return this }
+  order() { return this }
+  limit() { return this }
+  range() { return this }
+  maybeSingle() {
+    return Promise.resolve({
+      data: null,
+      error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' },
+    })
+  }
+  single() {
+    return Promise.resolve({
+      data: null,
+      error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' },
+    })
+  }
+}
+
+class NoopSupabaseClient {
+  from(table: string) {
+    return new NoopQueryBuilder(table)
+  }
+
+  rpc() {
+    return Promise.resolve({
+      data: null,
+      error: { message: 'Supabase not configured', code: 'SUPABASE_NOT_CONFIGURED' },
+    })
+  }
+}
+
+// Initialize Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || ''
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey && supabaseUrl.includes('supabase.co'))
+
+function createClientOrFallback() {
+  if (!isSupabaseConfigured) {
+    return new NoopSupabaseClient() as any
+  }
+
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
+  })
+}
+
+export const supabase = createClientOrFallback()
 
 // Export function to create client (for server-side usage)
 export function createSupabaseClient() {
-  return createClient(supabaseUrl, supabaseAnonKey)
+  return createClientOrFallback()
 }
 
 // User operations

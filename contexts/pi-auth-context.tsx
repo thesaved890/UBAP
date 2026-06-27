@@ -68,6 +68,7 @@ interface PiAuthContextType {
 }
 
 const PiAuthContext = createContext<PiAuthContextType | undefined>(undefined);
+const AUTH_STORAGE_KEY = "ubap:pi-auth";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function isPiBrowser(): boolean {
@@ -104,6 +105,37 @@ function loadSDKScript(url: string): Promise<void> {
   });
 }
 
+function readStoredAuth() {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredAuth(token: string | null, user: LoginDTO | null) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify({ token, user }));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function clearStoredAuth() {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.removeItem(AUTH_STORAGE_KEY);
+  } catch {
+    // ignore storage errors
+  }
+}
+
 // ─── Provider ─────────────────────────────────────────────────────────────────
 export function PiAuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -116,6 +148,17 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
   const initialize = async () => {
     setIsLoading(true);
     try {
+      const storedSession = readStoredAuth();
+      if (storedSession?.user) {
+        setUserData(storedSession.user);
+        setPiAccessToken(storedSession.token ?? null);
+        setIsAuthenticated(true);
+        setAuthMessage("Session restaurée");
+        setIsSandbox(PI_NETWORK_CONFIG.SANDBOX);
+        setIsLoading(false);
+        return;
+      }
+
       setAuthMessage("Chargement Pi SDK...");
       if (PI_NETWORK_CONFIG.SDK_URL) {
         await loadSDKScript(PI_NETWORK_CONFIG.SDK_URL);
@@ -179,6 +222,7 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
       const loginData = await loginResponse.json();
       const user: LoginDTO = loginData.user ?? loginData;
       setUserData(user);
+      writeStoredAuth(authResult.accessToken, user);
 
       setIsAuthenticated(true);
       setAuthMessage("Connecte!");
@@ -196,6 +240,7 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
+    clearStoredAuth();
     setIsAuthenticated(false);
     setUserData(null);
     setPiAccessToken(null);

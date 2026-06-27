@@ -13,9 +13,9 @@ export async function POST(request: Request) {
       )
     }
 
-    const user = await getOrCreateUser(piUid, username)
+    const user = await getOrCreateUser(piUid, username, (body as { country?: string }).country || "Nigeria")
 
-    return NextResponse.json({ user })
+    return NextResponse.json({ user, mode: process.env.NEXT_PUBLIC_SUPABASE_URL ? "supabase" : "local" })
   } catch (error: any) {
     console.error("[v0] /api/auth/pi-login error:", error)
     return NextResponse.json(

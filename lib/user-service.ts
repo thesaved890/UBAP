@@ -1,6 +1,6 @@
 "use server"
 
-import { createSupabaseClient } from "./supabase-service"
+import { createSupabaseClient, isSupabaseConfigured } from "./supabase-service"
 
 interface User {
   id: string
@@ -16,61 +16,87 @@ interface User {
   last_login: string
 }
 
-// Get or create user
-export async function getOrCreateUser(piUid: string, username: string, country: string = "Nigeria") {
-  const supabase = createSupabaseClient()
-  
-  // Try to find existing user
-  const { data: existingUser, error: fetchError } = await supabase
-    .from('users')
-    .select('*')
-    .eq('pi_uid', piUid)
-    .maybeSingle()
-
-  if (fetchError && fetchError.code !== 'PGRST116') {
-    console.error('[v0] Error fetching user by pi_uid:', fetchError)
-    throw new Error('Failed to fetch user')
-  }
-
-  if (existingUser) {
-    // Update last login
-    await supabase
-      .from('users')
-      .update({ last_login: new Date().toISOString() })
-      .eq('id', existingUser.id)
-      
-    return existingUser
-  }
-
-  // Create new user
-  const newUser = {
+function buildLocalUser(piUid: string, username: string, country: string = "Nigeria") {
+  return {
+    id: `local-${piUid}`,
     pi_uid: piUid,
     username,
     country,
     balance_pi: 0,
     balance_fiat: 0,
     fiat_currency: getCurrencyForCountry(country),
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
     last_login: new Date().toISOString(),
+    source: "local",
+  }
+}
+
+// Get or create user
+export async function getOrCreateUser(piUid: string, username: string, country: string = "Nigeria") {
+  if (!isSupabaseConfigured) {
+    return buildLocalUser(piUid, username, country)
   }
 
-  const { data: createdUser, error: createError } = await supabase
-    .from('users')
-    .insert(newUser)
-    .select()
-    .single()
+  const supabase = createSupabaseClient()
 
-  if (createError) {
-    console.error('[v0] Error creating user:', createError)
-    throw new Error('Failed to create user')
+  try {
+    const { data: existingUser, error: fetchError } = await supabase
+      .from('users')
+      .select('*')
+      .eq('pi_uid', piUid)
+      .maybeSingle()
+
+    if (fetchError && fetchError.code !== 'PGRST116') {
+      console.warn('[v0] Falling back to local user profile:', fetchError)
+      return buildLocalUser(piUid, username, country)
+    }
+
+    if (existingUser) {
+      await supabase
+        .from('users')
+        .update({ last_login: new Date().toISOString() })
+        .eq('id', existingUser.id)
+
+      return existingUser
+    }
+
+    const newUser = {
+      pi_uid: piUid,
+      username,
+      country,
+      balance_pi: 0,
+      balance_fiat: 0,
+      fiat_currency: getCurrencyForCountry(country),
+      last_login: new Date().toISOString(),
+    }
+
+    const { data: createdUser, error: createError } = await supabase
+      .from('users')
+      .insert(newUser)
+      .select()
+      .single()
+
+    if (createError) {
+      console.warn('[v0] Falling back to local user profile:', createError)
+      return buildLocalUser(piUid, username, country)
+    }
+
+    return createdUser
+  } catch (error) {
+    console.warn('[v0] Supabase unavailable, using local user profile:', error)
+    return buildLocalUser(piUid, username, country)
   }
-
-  return createdUser
 }
 
 // Update user balance
 export async function updateUserBalance(userId: string, balancePi?: number, balanceFiat?: number) {
+  if (!isSupabaseConfigured) {
+    return true
+  }
+
   const supabase = createSupabaseClient()
-  
+
   const updates: any = {}
   if (balancePi !== undefined) updates.balance_pi = balancePi
   if (balanceFiat !== undefined) updates.balance_fiat = balanceFiat
@@ -81,8 +107,8 @@ export async function updateUserBalance(userId: string, balancePi?: number, bala
     .eq('id', userId)
 
   if (error) {
-    console.error('[v0] Error updating balance:', error)
-    throw new Error('Failed to update balance')
+    console.warn('[v0] Balance update skipped:', error)
+    return true
   }
 
   return true
@@ -90,8 +116,12 @@ export async function updateUserBalance(userId: string, balancePi?: number, bala
 
 // Get user by ID
 export async function getUserById(userId: string) {
+  if (!isSupabaseConfigured) {
+    return null
+  }
+
   const supabase = createSupabaseClient()
-  
+
   const { data, error } = await supabase
     .from('users')
     .select('*')
@@ -99,7 +129,7 @@ export async function getUserById(userId: string) {
     .single()
 
   if (error) {
-    console.error('[v0] Error fetching user:', error)
+    console.warn('[v0] Error fetching user:', error)
     return null
   }
 

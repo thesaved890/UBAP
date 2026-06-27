@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PiServerSDK } from "@/lib/pi-network-sdk";
 import { recordIncomingPayment } from "@/lib/app-wallet-service";
+import { logAuditEvent } from "@/lib/audit-service";
 
 /**
  * POST /api/pi/complete
@@ -34,13 +35,21 @@ export async function POST(request: Request) {
       // Log it for investigation but complete the payment
     }
 
+    await logAuditEvent("pi_payment_completed", "Payment completion recorded", {
+      paymentId,
+      txid: finalTxid,
+      amount,
+      userId,
+      mode: sdk.isConfigured ? "pi_api" : "sandbox",
+    });
+
     // No API key → complete locally
     if (!sdk.isConfigured) {
       return NextResponse.json({
         success: true,
         paymentId,
         txid: finalTxid,
-        mode: "local_sandbox",
+        mode: "sandbox",
         wallet_recorded: true,
       });
     }

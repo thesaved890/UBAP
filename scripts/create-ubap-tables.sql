@@ -16,6 +16,16 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Audit logs table
+CREATE TABLE IF NOT EXISTS audit_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  event_type TEXT NOT NULL,
+  status TEXT DEFAULT 'completed',
+  details TEXT,
+  metadata JSONB DEFAULT '{}'::jsonb,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Transactions table
 CREATE TABLE IF NOT EXISTS transactions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -131,6 +141,7 @@ CREATE TABLE IF NOT EXISTS material_holdings (
 
 -- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_users_pi_uid ON users(pi_uid);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_transactions_user_id ON transactions(user_id);
 CREATE INDEX IF NOT EXISTS idx_transactions_reference ON transactions(reference_number);
 CREATE INDEX IF NOT EXISTS idx_virtual_cards_user_id ON virtual_cards(user_id);
@@ -141,6 +152,7 @@ CREATE INDEX IF NOT EXISTS idx_mobile_money_user_id ON mobile_money_accounts(use
 
 -- Enable Row Level Security
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE virtual_cards ENABLE ROW LEVEL SECURITY;
 ALTER TABLE savings_goals ENABLE ROW LEVEL SECURITY;
@@ -153,6 +165,8 @@ ALTER TABLE material_holdings ENABLE ROW LEVEL SECURITY;
 -- RLS Policies (users can only access their own data)
 CREATE POLICY "Users can view own data" ON users FOR SELECT USING (auth.uid()::text = pi_uid);
 CREATE POLICY "Users can update own data" ON users FOR UPDATE USING (auth.uid()::text = pi_uid);
+CREATE POLICY "Allow audit inserts" ON audit_logs FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow audit reads" ON audit_logs FOR SELECT USING (true);
 
 CREATE POLICY "Users can view own transactions" ON transactions FOR SELECT USING (user_id IN (SELECT id FROM users WHERE pi_uid = auth.uid()::text));
 CREATE POLICY "Users can create transactions" ON transactions FOR INSERT WITH CHECK (user_id IN (SELECT id FROM users WHERE pi_uid = auth.uid()::text));
