@@ -48,12 +48,24 @@ function createClientOrFallback() {
     return new NoopSupabaseClient() as any
   }
 
-  return createClient(supabaseUrl, supabaseAnonKey, {
-    auth: {
-      persistSession: false,
-      autoRefreshToken: false,
-    },
-  })
+  try {
+    let formattedUrl = supabaseUrl
+    if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+      formattedUrl = `https://${formattedUrl}`
+    }
+    // Validate that it parses as a valid URL
+    new URL(formattedUrl)
+
+    return createClient(formattedUrl, supabaseAnonKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    })
+  } catch (error) {
+    console.error("[supabase] Failed to initialize Supabase client, falling back to Noop client:", error)
+    return new NoopSupabaseClient() as any
+  }
 }
 
 export const supabase = createClientOrFallback()
