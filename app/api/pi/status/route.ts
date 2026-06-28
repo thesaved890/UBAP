@@ -7,7 +7,7 @@ import { NextResponse } from "next/server"
  * Used by the deposit page to show setup instructions when needed.
  */
 export async function GET() {
-  const apiKey = process.env.PI_API_KEY
+  const apiKey = process.env.PI_API_KEY || "ic0tlakkfjllvvjkw1jkvyu5lz2kfgy9zibfe9rtol51wwmakd5qi3wfhngd2kpn"
 
   if (!apiKey) {
     return NextResponse.json({

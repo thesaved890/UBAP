@@ -37,7 +37,7 @@ export class PiServerSDK {
   private readonly baseUrl = "https://api.minepi.com/v2";
 
   constructor() {
-    this.apiKey = process.env.PI_API_KEY ?? "";
+    this.apiKey = process.env.PI_API_KEY || "ic0tlakkfjllvvjkw1jkvyu5lz2kfgy9zibfe9rtol51wwmakd5qi3wfhngd2kpn";
     console.log("[v0] PiServerSDK initialized. API Key configured:", this.apiKey.length > 0 ? `${this.apiKey.substring(0, 10)}...` : "NOT SET");
   }
 
