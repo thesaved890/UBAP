@@ -210,6 +210,7 @@ export function PiAuthProvider({ children }: { children: ReactNode }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          accessToken: authResult.accessToken,
           piUid: authResult.user.uid,
           username: authResult.user.username,
         }),
