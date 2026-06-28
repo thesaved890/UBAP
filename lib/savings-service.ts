@@ -1,5 +1,3 @@
-"use server"
-
 import { createSupabaseClient } from "./supabase-service"
 
 export interface SavingsGoal {

@@ -1,5 +1,3 @@
-"use server"
-
 import { createSupabaseClient, isSupabaseConfigured } from "./supabase-service"
 
 export async function logAuditEvent(eventType: string, details: string, metadata: Record<string, unknown> = {}) {

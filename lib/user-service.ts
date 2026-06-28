@@ -1,5 +1,3 @@
-"use server"
-
 import { createSupabaseClient, isSupabaseConfigured } from "./supabase-service"
 
 interface User {
