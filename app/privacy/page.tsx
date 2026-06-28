@@ -140,9 +140,11 @@ export default function PrivacyPage() {
               We are committed to protecting your privacy and securing your data. Your information is encrypted with
               AES-256 and never shared with third parties.
             </p>
-            <Button variant="outline" className="w-full bg-transparent">
-              Read Full Privacy Policy
-            </Button>
+            <Link href="/privacy-policy">
+              <Button variant="outline" className="w-full bg-transparent">
+                Read Full Privacy Policy
+              </Button>
+            </Link>
           </CardContent>
         </Card>
       </main>

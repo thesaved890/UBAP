@@ -266,15 +266,19 @@ export default function SettingsPage() {
               <ChevronRight className="h-4 w-4" />
             </Button>
 
-            <Button variant="outline" className="w-full justify-between bg-transparent">
-              <span>Terms of Service</span>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+            <Link href="/terms-of-service" className="w-full block">
+              <Button variant="outline" className="w-full justify-between bg-transparent">
+                <span>Terms of Service</span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </Link>
 
-            <Button variant="outline" className="w-full justify-between bg-transparent">
-              <span>Privacy Policy</span>
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+            <Link href="/privacy-policy" className="w-full block">
+              <Button variant="outline" className="w-full justify-between bg-transparent">
+                <span>Privacy Policy</span>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </CardContent>
         </Card>
 

@@ -822,6 +822,22 @@ export default function HomePage() {
               </Card>
             </Link>
           </div>
+          
+          {/* Footer Section */}
+          <footer className="pt-8 pb-6 text-center space-y-2 border-t border-border mt-8">
+            <p className="text-xs text-muted-foreground">
+              © {new Date().getFullYear()} UBAP. All rights reserved.
+            </p>
+            <div className="flex justify-center gap-4 text-xs font-semibold text-primary">
+              <Link href="/privacy-policy" className="hover:underline">
+                Privacy Policy
+              </Link>
+              <span className="text-muted-foreground">•</span>
+              <Link href="/terms-of-service" className="hover:underline">
+                Terms of Service
+              </Link>
+            </div>
+          </footer>
         </main>
       </div>
     </>
