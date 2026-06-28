@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server"
-import { getOrCreateUser } from "@/lib/user-service"
 
 export async function POST(request: Request) {
   try {
@@ -13,6 +12,8 @@ export async function POST(request: Request) {
       )
     }
 
+    // Lazy-load user-service to avoid importing Supabase client at build-time
+    const { getOrCreateUser } = await import("@/lib/user-service")
     const user = await getOrCreateUser(piUid, username, (body as { country?: string }).country || "Nigeria")
 
     return NextResponse.json({ user, mode: process.env.NEXT_PUBLIC_SUPABASE_URL ? "supabase" : "local" })
