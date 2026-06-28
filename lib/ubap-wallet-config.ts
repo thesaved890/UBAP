@@ -49,12 +49,9 @@ export const UBAP_WALLET_CONFIG = {
    * Check if wallet is properly configured
    */
   isConfigured: (): boolean => {
-    const walletAddress =
-      process.env.NEXT_PUBLIC_UBAP_WALLET_ADDRESS ||
-      process.env.NEXT_PUBLIC_APP_WALLET_ADDRESS ||
-      ''
-
-    return walletAddress !== '' && walletAddress !== 'ubap_default_wallet'
+    // Consider the resolved appWalletAddress value (including fallbacks)
+    const resolved = UBAP_WALLET_CONFIG.appWalletAddress || ''
+    return resolved !== '' && resolved !== 'ubap_default_wallet'
   },
 
   /**
