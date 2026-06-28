@@ -39,8 +39,8 @@ class NoopSupabaseClient {
 }
 
 // Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || ''
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || ''
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim() || 'https://upwialhhvmboygmqgwga.supabase.co'
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() || 'sb_publishable_UWPLfD2k86IHwn3smS9IVg_J6rZZNGv'
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey && supabaseUrl.includes('supabase.co'))
 
 function createClientOrFallback() {

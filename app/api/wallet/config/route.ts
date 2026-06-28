@@ -8,7 +8,7 @@ export async function GET() {
       process.env.NEXT_PUBLIC_APP_WALLET_ADDRESS ||
       'GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M'
     const hasPrivateKey = !!(process.env.PI_APP_WALLET_PRIVATE_KEY || "SAGVBYLF7L7KPHOW66JQYOPMEJMZLXOSZTFIL463PZJ4CGAKQ7MWQR2R")
-    const piNetwork = process.env.PI_NETWORK || 'mainnet'
+    const piNetwork = process.env.PI_NETWORK || 'sandbox'
 
     // Validate wallet address format
     const isValid = Boolean(
