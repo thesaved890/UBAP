@@ -15,13 +15,20 @@ export const UBAP_WALLET_CONFIG = {
    * 
    * Current Wallet: GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M
    */
-  appWalletAddress: process.env.NEXT_PUBLIC_UBAP_WALLET_ADDRESS || "GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M",
+  appWalletAddress:
+    process.env.NEXT_PUBLIC_UBAP_WALLET_ADDRESS ||
+    process.env.NEXT_PUBLIC_APP_WALLET_ADDRESS ||
+    "GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M",
 
   /**
    * Wallet recipient for server-side payment approvals
    * When user sends Pi to UBAP, this is where it flows
    */
-  recipientAddress: process.env.NEXT_PUBLIC_UBAP_RECIPIENT || "GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M",
+  recipientAddress:
+    process.env.NEXT_PUBLIC_UBAP_RECIPIENT ||
+    process.env.NEXT_PUBLIC_UBAP_WALLET_ADDRESS ||
+    process.env.NEXT_PUBLIC_APP_WALLET_ADDRESS ||
+    "GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M",
 
   /**
    * Transaction fee percentage (0.1% of deposit)
@@ -42,10 +49,12 @@ export const UBAP_WALLET_CONFIG = {
    * Check if wallet is properly configured
    */
   isConfigured: (): boolean => {
-    return (
-      !!process.env.NEXT_PUBLIC_UBAP_WALLET_ADDRESS &&
-      process.env.NEXT_PUBLIC_UBAP_WALLET_ADDRESS !== "ubap_default_wallet"
-    );
+    const walletAddress =
+      process.env.NEXT_PUBLIC_UBAP_WALLET_ADDRESS ||
+      process.env.NEXT_PUBLIC_APP_WALLET_ADDRESS ||
+      ''
+
+    return walletAddress !== '' && walletAddress !== 'ubap_default_wallet'
   },
 
   /**

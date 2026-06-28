@@ -22,7 +22,7 @@ Your wallet address and private key must be added to your Vercel project setting
 
 ### 1.2 Add Wallet Address (Public)
 
-**Variable Name:** `NEXT_PUBLIC_APP_WALLET_ADDRESS`
+**Variable Name:** `NEXT_PUBLIC_UBAP_WALLET_ADDRESS`
 
 **Value:** `GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M`
 
@@ -162,7 +162,7 @@ View your app wallet activity:
 ### "Wallet address not configured"
 
 - Check environment variables in Vercel are set
-- Verify `NEXT_PUBLIC_APP_WALLET_ADDRESS` is correct
+- Verify `NEXT_PUBLIC_UBAP_WALLET_ADDRESS` is correct
 - Wait 5 minutes for deployment to propagate
 - Hard refresh browser (Ctrl+Shift+R)
 

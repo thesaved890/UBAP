@@ -1,5 +1,3 @@
-"use server"
-
 import { createSupabaseClient } from "./supabase-service"
 
 export interface AppWallet {
@@ -340,7 +338,7 @@ export async function getAppWalletTransactions(
  * Validate a Pi wallet address format
  * Pi addresses are 56 characters, uppercase alphanumeric
  */
-export async function isValidPiAddress(address: string): Promise<boolean> {
+export function isValidPiAddress(address: string): boolean {
   return /^[A-Z0-9]{56}$/.test(address)
 }
 

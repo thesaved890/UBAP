@@ -25,7 +25,7 @@ SAGVBYLF7L7KPHOW66JQYOPMEJMZLXOSZTFIL463PZJ4CGAKQ7MWQR2R
 - [ ] Go to [vercel.com](https://vercel.com)
 - [ ] Select UBAP project
 - [ ] Click Settings → Environment Variables
-- [ ] Add `NEXT_PUBLIC_APP_WALLET_ADDRESS` = `GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M`
+- [ ] Add `NEXT_PUBLIC_UBAP_WALLET_ADDRESS` = `GAGNZW6KQW7CXIFBR7RC4NHU6QZMD62CRJTAX24P4IXSLJZLZ22TWA2M`
 - [ ] Add `PI_APP_WALLET_PRIVATE_KEY` = `SAGVBYLF7L7KPHOW66JQYOPMEJMZLXOSZTFIL463PZJ4CGAKQ7MWQR2R` (Production only)
 - [ ] Add `PI_NETWORK` = `mainnet`
 - [ ] Click "Redeploy" on latest deployment
@@ -190,7 +190,7 @@ Each transaction includes:
 5. Check application logs in Vercel
 
 ### Wrong address displayed?
-1. Verify `NEXT_PUBLIC_APP_WALLET_ADDRESS` in Vercel
+1. Verify `NEXT_PUBLIC_UBAP_WALLET_ADDRESS` in Vercel
 2. Check no typos in address
 3. Force redeploy on Vercel
 4. Clear browser cache completely

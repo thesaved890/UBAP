@@ -6,7 +6,7 @@
     "node": "24.x"
   },
   "scripts": {
-    "build": "node_modules/.bin/next build",
+    "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start"

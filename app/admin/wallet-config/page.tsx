@@ -144,7 +144,7 @@ export default function WalletConfigPage() {
             <li className="flex gap-3">
               <span className="font-bold flex-shrink-0">1.</span>
               <span>In Vercel project settings, add environment variables:
-                <code className="block bg-white p-2 rounded mt-1 font-mono text-xs">NEXT_PUBLIC_APP_WALLET_ADDRESS=GAGNZW6...TWA2M</code>
+                <code className="block bg-white p-2 rounded mt-1 font-mono text-xs">NEXT_PUBLIC_UBAP_WALLET_ADDRESS=GAGNZW6...TWA2M</code>
               </span>
             </li>
             <li className="flex gap-3">
